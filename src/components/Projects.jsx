@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { useState, useRef } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
 
 const projectData = [
@@ -7,7 +7,7 @@ const projectData = [
     id: 'p1',
     title: 'Bubble Notes',
     blurb: 'Sticky thoughts that float around',
-    color: 'from-pink-400 to-rose-400',
+    color: 'from-rose-300 to-rose-400',
     details: `A playful note-taking experiment where ideas drift like bubbles.
 - Drag, pop, and connect notes.
 - Color-coded moods.
@@ -19,7 +19,7 @@ Built with a focus on joyful micro-interactions and rapid ideation.`,
     id: 'p2',
     title: 'Snack Stack',
     blurb: 'Gamified habit tracker',
-    color: 'from-yellow-300 to-orange-400',
+    color: 'from-rose-200 to-rose-300',
     details: `Build stacks of tiny wins each day.
 - Collect stickers for streaks.
 - Whimsical charts.
@@ -29,7 +29,7 @@ Built with a focus on joyful micro-interactions and rapid ideation.`,
     id: 'p3',
     title: 'Wobble Web',
     blurb: 'A jiggly CSS playground',
-    color: 'from-sky-400 to-indigo-400',
+    color: 'from-rose-300 to-rose-500',
     details: `An interactive playground to learn CSS transforms and animations.
 - Live presets.
 - Shareable wobble links.
@@ -39,7 +39,7 @@ Built with a focus on joyful micro-interactions and rapid ideation.`,
     id: 'p4',
     title: 'Kind Koala',
     blurb: 'Mindful micro-journal',
-    color: 'from-emerald-300 to-teal-400',
+    color: 'from-rose-200 to-rose-400',
     details: `A gentle space to jot down thoughts without pressure.
 - Warm prompts.
 - Cute emojis.
@@ -49,9 +49,14 @@ Built with a focus on joyful micro-interactions and rapid ideation.`,
 
 const Projects = () => {
   const [open, setOpen] = useState(null)
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
 
   return (
-    <section id="projects" className="py-20">
+    <section id="projects" ref={ref} className="relative py-24">
+      <motion.div style={{ y }} className="pointer-events-none absolute inset-x-0 -top-24 h-56 bg-gradient-to-b from-rose-50 to-transparent" />
+
       <div className="mx-auto max-w-6xl px-6">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -72,7 +77,7 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.05 }}
-              className={`text-left rounded-2xl p-5 bg-white shadow hover:-translate-y-1 transition relative overflow-hidden border border-gray-100`}
+              className={`text-left rounded-2xl p-5 bg-white shadow hover:-translate-y-1 transition relative overflow-hidden border border-rose-100`}
             >
               <div className={`absolute inset-0 opacity-30 bg-gradient-to-br ${p.color}`} />
               <div className="relative">
@@ -81,7 +86,7 @@ const Projects = () => {
                   <ExternalLink className="h-4 w-4 text-gray-600" />
                 </div>
                 <p className="mt-2 text-sm text-gray-700">{p.blurb}</p>
-                <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-gray-700 bg-white/70 backdrop-blur px-3 py-1 rounded-full border border-gray-200">
+                <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-gray-700 bg-white/70 backdrop-blur px-3 py-1 rounded-full border border-rose-100">
                   Click to open
                 </div>
               </div>
@@ -128,7 +133,7 @@ const Projects = () => {
                     <p key={i}>{line}</p>
                   ))}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="rounded-2xl border border-gray-200 p-4 bg-gradient-to-br from-white to-gray-50 shadow-sm">
+                    <div className="rounded-2xl border border-rose-100 p-4 bg-gradient-to-br from-white to-rose-50/40 shadow-sm">
                       <h4 className="font-semibold">What I learned</h4>
                       <ul className="list-disc list-inside text-sm mt-2 space-y-1">
                         <li>Balancing whimsy with usability</li>
@@ -136,7 +141,7 @@ const Projects = () => {
                         <li>Keeping performance snappy</li>
                       </ul>
                     </div>
-                    <div className="rounded-2xl border border-gray-200 p-4 bg-gradient-to-br from-white to-gray-50 shadow-sm">
+                    <div className="rounded-2xl border border-rose-100 p-4 bg-gradient-to-br from-white to-rose-50/40 shadow-sm">
                       <h4 className="font-semibold">Tech highlights</h4>
                       <ul className="list-disc list-inside text-sm mt-2 space-y-1">
                         <li>Flexible component patterns</li>
